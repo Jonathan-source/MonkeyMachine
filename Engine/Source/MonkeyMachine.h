@@ -1,7 +1,9 @@
 #pragma once
 
-// For the user of MonkeyMachine
-
-#include "Framework.h"
+// For use by applications.
 
 #include "IApplication.h"
+
+// --- Entry Point --------------------------
+#include "EntryPoint.h"
+// ------------------------------------------

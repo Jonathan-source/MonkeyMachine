@@ -1,1 +1,3 @@
-﻿LINK : fatal error LNK1104: cannot open file 'C:\Dev\MonkeyMachine\Build\Bin\Engine\Win64_Debug\Engine.lib'
+﻿  Sandbox.cpp
+  Sandbox.vcxproj -> C:\Dev\MonkeyMachine_old\Build\Bin\Sandbox\Win64_Debug\Sandbox.exe
+          1 file(s) copied.
