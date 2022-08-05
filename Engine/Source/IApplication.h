@@ -2,13 +2,19 @@
 
 #include "Framework.h"
 
+#include "Window.h"
+
 namespace MonkeyMachine
 {
 	class ENGINE_API IApplication
 	{
 	public:
-		IApplication() = default;
-		virtual ~IApplication() = default;
+		IApplication();
+		IApplication(const IApplication&) = delete;
+		IApplication& operator=(const IApplication&) = delete;
+		IApplication& operator=(IApplication&&) = delete;
+		IApplication(IApplication&&) = delete;
+		virtual ~IApplication();
 
 		void Run();
 
@@ -27,6 +33,8 @@ namespace MonkeyMachine
 	
 	private:
 		bool m_isRunning;
+
+		Window* m_window;
 	};
 
 } // end of namespace

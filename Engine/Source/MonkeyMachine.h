@@ -1,6 +1,6 @@
 #pragma once
 
-// For use by applications.
+// For use by application.
 
 // --- Application Interface ---------------
 #include "IApplication.h"

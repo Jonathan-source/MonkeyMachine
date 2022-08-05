@@ -1,2 +1,7 @@
-﻿  Sandbox.vcxproj -> C:\Dev\MonkeyMachine\Build\Bin\Sandbox\Win64_Debug\Sandbox.exe
+﻿  EnginePCH.cpp
+  IApplication.cpp
+  Utility.cpp
+  Window.cpp
+     Creating library ..\Bin\Engine\Win64_Debug\Engine.lib and object ..\Bin\Engine\Win64_Debug\Engine.exp
+  Engine.vcxproj -> C:\Dev\MonkeyMachine\Build\Bin\Engine\Win64_Debug\Engine.dll
           1 file(s) copied.

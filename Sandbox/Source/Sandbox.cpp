@@ -18,12 +18,6 @@ void Sandbox::OnInput()
 void Sandbox::OnUpdate(float deltaTime)
 {
 	std::cout << __FUNCTION__ << std::endl;
-
-	m_deltaTimeAccumulator += deltaTime;
-
-	if (m_deltaTimeAccumulator > 10.0) {
-		Shutdown();
-	}
 }
 
 void Sandbox::OnRender()
