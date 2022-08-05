@@ -18,10 +18,10 @@ void CreateConsoleWindow(int bufferLines, int bufferColumns, int windowLines, in
 
 	extern MonkeyMachine::IApplication* CreateApplication();
 
-	INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nCmdShow)
+	int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 	{
 		UNREFERENCED_PARAMETER(hPrevInstance);
-		UNREFERENCED_PARAMETER(lpCmdLine);
+		UNREFERENCED_PARAMETER(pCmdLine);
 		UNREFERENCED_PARAMETER(nCmdShow);
 
 #if defined(DEBUG) | defined(_DEBUG)
@@ -34,8 +34,8 @@ void CreateConsoleWindow(int bufferLines, int bufferColumns, int windowLines, in
 		try {
 			app->Run();
 		}
-		catch (const std::exception &error) {
-			std::cout << error.what() << std::endl;
+		catch (const std::exception &e) {
+			std::cout << e.what() << std::endl;
 		}
 		catch (const char* errorMsg) {
 			std::cout << errorMsg << std::endl;

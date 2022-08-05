@@ -1,0 +1,1 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(527,5): error MSB3191: Unable to create directory "..\Bin\Sandbox\Win64_Debug\". Cannot create "C:\Dev\MonkeyMachine\Build\Bin\Sandbox\Win64_Debug" because a file or directory with the same name already exists.

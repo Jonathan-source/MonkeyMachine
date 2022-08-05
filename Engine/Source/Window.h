@@ -37,7 +37,7 @@ namespace MonkeyMachine
 
 	public:
 		// Callbacks
-		void(*onResize)(uint32_t, uint32_t);
+		std::function<void(uint32_t, uint32_t)> onResize;
 
 		static int64_t __stdcall WndProc(void* hWnd, uint32_t msg, uint64_t wParam, int64_t lParam);
 

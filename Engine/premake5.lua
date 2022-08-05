@@ -6,7 +6,7 @@ project "Engine"
 
 	basedir(BASE_DIR)
 	location (BASE_DIR .. "Build/Generated")
-	buildlog (BASE_DIR .. "Build/Logs/GameBuildLog.log")
+	buildlog (BASE_DIR .. "Build/Logs/EngineBuildLog.log")
 	objdir (BASE_DIR .. "Build/Intermediate/%{cfg.platform}_%{cfg.buildcfg}")
 	targetdir (BASE_DIR .. "Build/Bin/%{prj.name}/%{cfg.platform}_%{cfg.buildcfg}")
 
