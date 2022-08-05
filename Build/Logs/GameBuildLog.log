@@ -1,7 +1,3 @@
-﻿  EnginePCH.cpp
-  IApplication.cpp
-  Utility.cpp
-  Window.cpp
-     Creating library ..\Bin\Engine\Win64_Debug\Engine.lib and object ..\Bin\Engine\Win64_Debug\Engine.exp
+﻿  Window.cpp
   Engine.vcxproj -> C:\Dev\MonkeyMachine\Build\Bin\Engine\Win64_Debug\Engine.dll
           1 file(s) copied.

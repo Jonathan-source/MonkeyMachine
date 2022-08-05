@@ -21,7 +21,7 @@ void MonkeyMachine::IApplication::Run()
 
 	Timer deltaTimer;
 
-	while (m_isRunning)
+	while (m_window->Loop())
 	{
 		// if input then
 		//OnInput();
