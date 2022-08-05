@@ -18,8 +18,6 @@ namespace MonkeyMachine
 		}
 	};
 
-	int64_t __stdcall WndProc(void* hWnd, uint32_t msg, uint64_t wParam, int64_t lParam);
-
 	class Window
 	{
 	public:
@@ -27,13 +25,21 @@ namespace MonkeyMachine
 		Window& operator=(const Window&) = delete;
 		Window& operator=(Window&&) = delete;
 		Window(Window&&) = delete;
-		virtual ~Window() = default;
+		virtual ~Window();
 
 		static Window* Create(const WindowProps& props = WindowProps());
 
 		bool Loop();
 
 		WindowProps GetProperties() const;
+
+		void OnResize(uint32_t width, uint32_t height);
+
+	public:
+		// Callbacks
+		void(*onResize)(uint32_t, uint32_t);
+
+		static int64_t __stdcall WndProc(void* hWnd, uint32_t msg, uint64_t wParam, int64_t lParam);
 
 	private:
 		Window(const WindowProps& props);

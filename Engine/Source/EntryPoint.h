@@ -43,11 +43,6 @@ void CreateConsoleWindow(int bufferLines, int bufferColumns, int windowLines, in
 	
 		delete app;
 
-#if defined(DEBUG) | defined(_DEBUG)
-		std::cout << "\nThank you for choosing MonkeyMachine! Press any key to continue." << std::endl;
-		getchar();
-#endif
-
 		return EXIT_SUCCESS;
 	}
 
@@ -63,7 +58,7 @@ void CreateConsoleWindow(int bufferLines, int bufferColumns, int windowLines, in
 		coninfo.dwSize.X = bufferColumns;
 		SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), coninfo.dwSize);
 
-		SMALL_RECT rect;
+		SMALL_RECT rect{};
 		rect.Left = 0;
 		rect.Top = 0;
 		rect.Right = windowColumns;

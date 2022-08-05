@@ -18,5 +18,5 @@ public:
 	virtual void OnShutdown() override;
 
 private:
-	float m_deltaTimeAccumulator;
+
 };

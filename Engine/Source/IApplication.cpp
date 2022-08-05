@@ -1,13 +1,11 @@
 #include "EnginePCH.h"
 #include "IApplication.h"
-
 #include "Timer.h"
 
 MonkeyMachine::IApplication::IApplication()
 	: m_isRunning(true)
 {
 	m_window = Window::Create();
-	//m_window->SetEventCallback(Application::OnInput);
 }
 
 MonkeyMachine::IApplication::~IApplication()

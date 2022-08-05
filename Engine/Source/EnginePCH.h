@@ -6,7 +6,7 @@
 #define HInstance() GetModuleHandle(NULL)
 #define SHADER(CODE) #CODE
 
-// DirectX 11 specific headers.
+// DirectX 11 specific headers
 #include <d3d11.h>
 #include <dxgi1_3.h>
 #include <dxgi1_4.h>
@@ -25,7 +25,7 @@ using namespace Microsoft::WRL;
 
 // ============================================================================
 
-// Standard.
+// Standard
 #include <string>
 #include <string_view>
 #include <exception>
@@ -46,3 +46,4 @@ using namespace Microsoft::WRL;
 #include <bitset>
 #include <iostream>
 #include <crtdbg.h>
+#include <functional>
