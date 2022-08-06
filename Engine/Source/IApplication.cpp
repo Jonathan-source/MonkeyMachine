@@ -5,12 +5,12 @@
 MonkeyMachine::IApplication::IApplication()
 	: m_isRunning(true)
 {
-	m_window = Window::Create();
+	m_pWindow = Window::Create();
 }
 
 MonkeyMachine::IApplication::~IApplication()
 {
-	delete m_window;
+	delete m_pWindow;
 }
 
 void MonkeyMachine::IApplication::Run()
@@ -19,7 +19,7 @@ void MonkeyMachine::IApplication::Run()
 
 	Timer deltaTimer;
 
-	while (m_window->Loop())
+	while (m_pWindow->RunMessageLoop())
 	{
 		// if input then
 		//OnInput();

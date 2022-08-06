@@ -2,6 +2,8 @@
 
 	This is an educational project with the single purpose of
 	learning DirectX11 and demonstrate various graphical techniques.
+
+	Date: 2022-08-06
 	Author: Jonathan Helsing [github.com/Jonathan-source]
 
  ======================================================================*/
@@ -12,7 +14,7 @@
 
 #include "IApplication.h"
 
-void CreateConsoleWindow(int bufferLines, int bufferColumns, int windowLines, int windowColumns);
+void CreateConsoleWindow(int, int, int, int);
 
 #if defined(WIN32) | defined(_WIN32)
 

@@ -1,7 +1,7 @@
 #include "EnginePCH.h"
 #include "Window.h"
 
-const LPCWSTR CLASS_NAME = L"MyWindowClass";
+#define WINDOW_CLASS_NAME "MonkeyWindowClass"
 
 int64_t __stdcall MonkeyMachine::Window::WndProc(void* hWnd, uint32_t msg, uint64_t wParam, int64_t lParam)
 {
@@ -17,6 +17,7 @@ int64_t __stdcall MonkeyMachine::Window::WndProc(void* hWnd, uint32_t msg, uint6
             if (wParam == VK_ESCAPE) 
             {
                 ::CloseWindow(static_cast<HWND>(hWnd));
+                ::DestroyWindow(static_cast<HWND>(hWnd));
                 ::PostQuitMessage(0);
                 return 0;
             }
@@ -57,20 +58,13 @@ MonkeyMachine::Window::Window(const WindowProps& props)
 	: m_props(props)
     , onResize(nullptr)
 {
-    Initialize();
+    RegisterWindowClass();
+    CreateRenderWindow();
 }
 
-MonkeyMachine::Window::~Window()
+void MonkeyMachine::Window::RegisterWindowClass()
 {
-    ::UnregisterClass(CLASS_NAME, ::GetModuleHandle(nullptr));
-}
-
-void MonkeyMachine::Window::Initialize()
-{
-    std::wstring title; 
-    title.assign(m_props.title.begin(), m_props.title.end());
-
-    const auto moduleHandle = ::GetModuleHandle(nullptr);
+    m_hInstance = ::GetModuleHandle(nullptr);
 
     WNDCLASSEX windowDesc{};
     windowDesc.cbSize = sizeof(WNDCLASSEX);
@@ -78,50 +72,74 @@ void MonkeyMachine::Window::Initialize()
     windowDesc.lpfnWndProc = (WNDPROC)&WndProc;
     windowDesc.cbClsExtra = 0;
     windowDesc.cbWndExtra = sizeof(this);
-    windowDesc.hInstance = moduleHandle;
+    windowDesc.hInstance = m_hInstance;
     windowDesc.hIcon = nullptr;
     windowDesc.hCursor = LoadCursor(nullptr, IDC_ARROW);
-    windowDesc.hbrBackground = (HBRUSH)(COLOR_BACKGROUND + 2);
+    windowDesc.hbrBackground = (HBRUSH)::CreateSolidBrush(RGB(100, 149, 237));
     windowDesc.lpszMenuName = nullptr;
-    windowDesc.lpszClassName = CLASS_NAME;
+    windowDesc.lpszClassName = WINDOW_CLASS_NAME;
     windowDesc.hIconSm = nullptr;
 
-    if(!::RegisterClassEx(&windowDesc))
-        ::MessageBoxA(nullptr, "Window Class Registration Failed!", "Fatal Error!", MB_ICONEXCLAMATION | MB_OK);
+    if (!::RegisterClassEx(&windowDesc))
+    {
+        ReportError("Window Class Registration Failed!");
+    }
+}
 
-    HWND handle = ::CreateWindowEx(
-        0, //WS_EX_CLIENTEDGE,
-        CLASS_NAME,
-        title.c_str(),
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, m_props.width, m_props.height,
-        nullptr, nullptr, moduleHandle, nullptr
+void MonkeyMachine::Window::CreateRenderWindow()
+{
+    int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+    RECT windowRect = { 0, 0, (LONG)m_props.width, (LONG)m_props.height };
+
+    AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, FALSE);
+
+    m_props.width = windowRect.right - windowRect.left;
+    m_props.height = windowRect.bottom - windowRect.top;
+
+    int windowX = (screenWidth - m_props.width) / 2;
+    int windowY = (screenHeight - m_props.height) / 2;
+
+    HWND windowHandle = ::CreateWindowEx(NULL,
+        WINDOW_CLASS_NAME,
+        m_props.title.c_str(),
+        WS_CAPTION | WS_SYSMENU | WS_THICKFRAME,
+        windowX, windowY, m_props.width, m_props.height,
+        nullptr, nullptr, m_hInstance, nullptr
     );
 
-    if (!handle)
+    if (!windowHandle)
     {
-        MessageBox(nullptr, L"Window Creation Failed!", L"Fatal Error!", MB_ICONEXCLAMATION | MB_OK);
-        return;
+        ReportError("Failed to create render window.");
     }
 
     // Save this class instance in the per - window memory.
-    ::SetWindowLongPtr(static_cast<HWND>(handle), 0, (LONG_PTR)this);
+    ::SetWindowLongPtr(static_cast<HWND>(windowHandle), 0, (LONG_PTR)this);
 
-    bool fullscreen = false;
-    if (fullscreen) ::ShowWindow(handle, SW_SHOWMAXIMIZED);
-    else ::ShowWindow(handle, SW_SHOWNORMAL);
-    ::UpdateWindow(handle);
-    ::SetFocus(handle);
+    if (m_props.isFullscreen) ::ShowWindow(windowHandle, SW_SHOWMAXIMIZED);
+    else ::ShowWindow(windowHandle, SW_SHOWNORMAL);
+    ::UpdateWindow(windowHandle);
+    ::SetFocus(windowHandle);
 
-    // We need to resend the initial WM_SIZE message since the first one arrives before our per-instance memory is set (thus getting ignored).
-    // Without this, the UI scaling is off until the next WM_SIZE message.
+    // We need to resend the initial WM_SIZE message since the first one 
+    // arrives before our per-instance memory is set. Without this, the UI
+    // scaling is off until the next WM_SIZE message.
 
-    RECT clientRect;
-    ::GetClientRect(static_cast<HWND>(handle), &clientRect);
+    RECT clientRect{};
+    ::GetClientRect(static_cast<HWND>(windowHandle), &clientRect);
     const auto clientWidth = clientRect.right - clientRect.left;
     const auto clientHeight = clientRect.bottom - clientRect.top;
 
-    ::PostMessage(static_cast<HWND>(handle), WM_SIZE, SIZE_RESTORED, (clientWidth & 0xFFFF) | ((clientHeight & 0xFFFF) << 16));
+    ::PostMessage(static_cast<HWND>(windowHandle), WM_SIZE, SIZE_RESTORED, (clientWidth & 0xFFFF) | ((clientHeight & 0xFFFF) << 16));
+}
+
+MonkeyMachine::Window::~Window()
+{
+    if (!UnregisterClass(WINDOW_CLASS_NAME, m_hInstance))
+    {
+        ReportError("Failed to unregister render window class");
+    }
 }
 
 void MonkeyMachine::Window::OnResize(uint32_t width, uint32_t height)
@@ -135,7 +153,7 @@ MonkeyMachine::WindowProps MonkeyMachine::Window::GetProperties() const
 	return m_props;
 }
 
-bool MonkeyMachine::Window::Loop()
+bool MonkeyMachine::Window::RunMessageLoop()
 {
     MSG msg{};
     while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))

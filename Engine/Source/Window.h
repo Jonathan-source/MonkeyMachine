@@ -9,11 +9,12 @@ namespace MonkeyMachine
 		std::string title;
 		uint32_t width;
 		uint32_t height;
+		bool isFullscreen;
 	
 		WindowProps(const std::string& title = "MonkeyMachine",
 			uint32_t width = 800u,
 			uint32_t height = 600u)
-			: title(title), width(width), height(height)
+			: title(title), width(width), height(height), isFullscreen(false)
 		{
 		}
 	};
@@ -29,7 +30,7 @@ namespace MonkeyMachine
 
 		static Window* Create(const WindowProps& props = WindowProps());
 
-		bool Loop();
+		bool RunMessageLoop();
 
 		WindowProps GetProperties() const;
 
@@ -46,7 +47,11 @@ namespace MonkeyMachine
 
 		WindowProps m_props;
 
-		void Initialize();
+		HINSTANCE m_hInstance;
+
+		void RegisterWindowClass();
+
+		void CreateRenderWindow();
 	};
 
 } // end of namespace

@@ -3,6 +3,7 @@ project "Engine"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "off"
+	characterset ("MBCS")
 
 	basedir(BASE_DIR)
 	location (BASE_DIR .. "Build/Generated")

@@ -7,7 +7,7 @@ ENTRYAPP(Sandbox)
 
 void Sandbox::OnStartup()
 {
-	std::cout << __FUNCTION__ << std::endl;
+
 }
 
 void Sandbox::OnInput()
@@ -27,5 +27,5 @@ void Sandbox::OnRender()
 
 void Sandbox::OnShutdown()
 {
-	std::cout << __FUNCTION__ << std::endl;
+
 }

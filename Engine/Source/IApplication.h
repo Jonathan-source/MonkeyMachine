@@ -34,7 +34,7 @@ namespace MonkeyMachine
 	private:
 		bool m_isRunning;
 
-		Window* m_window;
+		Window* m_pWindow;
 	};
 
 } // end of namespace
