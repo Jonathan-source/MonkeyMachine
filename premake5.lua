@@ -10,17 +10,14 @@ print("\nBase directory: " .. BASE_DIR)
 --	WORKSPACE
 -----------------------------------------
 workspace ("Workspace")
-	architecture "x86_64"
+	architecture "x64"
     startproject "Sandbox"
 	
 	platforms { "Win64" }
 	configurations { "Debug", "Release" }
 	
 	flags { "MultiProcessorCompile" }
-  
-    postbuildcommands {
-	    "{COPYFILE} %{wks.location}Build/Bin/Engine/%{cfg.platform}_%{cfg.buildcfg}/Engine.dll %{wks.location}Build/Bin/Sandbox/%{cfg.platform}_%{cfg.buildcfg}/",
-    }	
+
 
 include "Sandbox/premake5.lua"
 include "Engine/premake5.lua"

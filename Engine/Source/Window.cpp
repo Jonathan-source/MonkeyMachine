@@ -3,6 +3,7 @@
 
 #define WINDOW_CLASS_NAME "MonkeyWindowClass"
 
+
 int64_t __stdcall MonkeyMachine::Window::WndProc(void* hWnd, uint32_t msg, uint64_t wParam, int64_t lParam)
 {
     auto* referenceWindow = (Window*)::GetWindowLongPtr(static_cast<HWND>(hWnd), 0);
@@ -14,14 +15,20 @@ int64_t __stdcall MonkeyMachine::Window::WndProc(void* hWnd, uint32_t msg, uint6
     switch (msg)
     {
         case WM_KEYDOWN:
-            if (wParam == VK_ESCAPE) 
+        {
+            if (wParam == VK_ESCAPE)
             {
                 ::CloseWindow(static_cast<HWND>(hWnd));
                 ::DestroyWindow(static_cast<HWND>(hWnd));
                 ::PostQuitMessage(0);
                 return 0;
             }
+
+            unsigned char keycode = static_cast<unsigned char>(wParam);
+            std::cout << keycode << std::endl;
+
             break;
+        }
         case WM_CLOSE:
         case WM_DESTROY:
         {
@@ -32,13 +39,12 @@ int64_t __stdcall MonkeyMachine::Window::WndProc(void* hWnd, uint32_t msg, uint6
         case WM_DISPLAYCHANGE:
         case WM_SIZE:
         {
-            uint32_t width = static_cast<uint32_t>(lParam & 0xffff);
-            uint32_t height = static_cast<uint32_t>((lParam >> 16) & 0xffff);
-            // static_cast<uint32_t>(LOWORD(lParam)), static_cast<uint32_t>(HIWORD(lParam))
-            referenceWindow->OnResize(width, height);
+            uint32_t width = static_cast<uint32_t>(lParam & 0xffff); // static_cast<uint32_t>(LOWORD(lParam))
+            uint32_t height = static_cast<uint32_t>((lParam >> 16) & 0xffff); // static_cast<uint32_t>(HIWORD(lParam))
+            referenceWindow->SetSize(width, height);
 
-            if (referenceWindow->onResize)
-                referenceWindow->onResize(width, height);
+            if (referenceWindow->OnResize)
+                referenceWindow->OnResize(width, height);
 
             break;
         }
@@ -56,7 +62,7 @@ MonkeyMachine::Window* MonkeyMachine::Window::Create(const WindowProps& props)
 
 MonkeyMachine::Window::Window(const WindowProps& props)
 	: m_props(props)
-    , onResize(nullptr)
+    , OnResize(nullptr)
 {
     RegisterWindowClass();
     CreateRenderWindow();
@@ -88,12 +94,12 @@ void MonkeyMachine::Window::RegisterWindowClass()
 
 void MonkeyMachine::Window::CreateRenderWindow()
 {
-    int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+    int screenWidth = ::GetSystemMetrics(SM_CXSCREEN);
+    int screenHeight = ::GetSystemMetrics(SM_CYSCREEN);
 
     RECT windowRect = { 0, 0, (LONG)m_props.width, (LONG)m_props.height };
 
-    AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, FALSE);
+    ::AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, FALSE);
 
     m_props.width = windowRect.right - windowRect.left;
     m_props.height = windowRect.bottom - windowRect.top;
@@ -142,7 +148,7 @@ MonkeyMachine::Window::~Window()
     }
 }
 
-void MonkeyMachine::Window::OnResize(uint32_t width, uint32_t height)
+void MonkeyMachine::Window::SetSize(uint32_t width, uint32_t height)
 {
     m_props.width = width;
     m_props.height = height;

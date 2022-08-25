@@ -2,6 +2,7 @@
 #include "IApplication.h"
 #include "Timer.h"
 
+
 MonkeyMachine::IApplication::IApplication()
 	: m_isRunning(true)
 {
@@ -10,7 +11,7 @@ MonkeyMachine::IApplication::IApplication()
 
 MonkeyMachine::IApplication::~IApplication()
 {
-	delete m_pWindow;
+	SAFE_DÉLETE(m_pWindow);
 }
 
 void MonkeyMachine::IApplication::Run()

@@ -1,6 +1,2 @@
-﻿  EnginePCH.cpp
-  IApplication.cpp
-  Utility.cpp
-  Window.cpp
+﻿  IApplication.cpp
   Engine.vcxproj -> C:\Dev\MonkeyMachine\Build\Bin\Engine\Win64_Debug\Engine.dll
-          1 file(s) copied.

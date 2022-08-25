@@ -35,6 +35,8 @@ namespace MonkeyMachine
 		bool m_isRunning;
 
 		Window* m_pWindow;
+		// Renderer* m_pRenderer;
+		// InputManager* m_pInputManager;
 	};
 
 } // end of namespace

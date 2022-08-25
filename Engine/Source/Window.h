@@ -34,11 +34,11 @@ namespace MonkeyMachine
 
 		WindowProps GetProperties() const;
 
-		void OnResize(uint32_t width, uint32_t height);
+		void SetSize(uint32_t width, uint32_t height);
 
 	public:
 		// Callbacks
-		std::function<void(uint32_t, uint32_t)> onResize;
+		std::function<void(uint32_t, uint32_t)> OnResize;
 
 		static int64_t __stdcall WndProc(void* hWnd, uint32_t msg, uint64_t wParam, int64_t lParam);
 

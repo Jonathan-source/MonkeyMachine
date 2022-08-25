@@ -42,3 +42,8 @@ project "Sandbox"
 		defines { "NDEBUG", "_UNICODE", "UNICODE" }
 		symbols "Off"
 		optimize "Speed"
+
+
+	postbuildcommands {
+		--"{COPYFILE} %{wks.location}Build/Bin/Engine/%{cfg.platform}_%{cfg.buildcfg}/Engine.dll %{wks.location}Build/Bin/Sandbox/%{cfg.platform}_%{cfg.buildcfg}/",
+	}	

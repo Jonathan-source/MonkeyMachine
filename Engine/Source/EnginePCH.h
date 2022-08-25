@@ -5,6 +5,8 @@
 
 #define HInstance() GetModuleHandle(NULL)
 #define SHADER(CODE) #CODE
+#define SAFE_RELEASE(p) if(p) (p)->Release()
+#define SAFE_DÉLETE(p) if(p) (delete p)
 
 // DirectX 11 specific headers
 #include <d3d11.h>
@@ -56,23 +58,23 @@ inline void ReportErrorAndThrow(const std::string& file, int line, const std::st
     DWORD errorCode = GetLastError();
     LPTSTR errorMessage = nullptr;
 
-    FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,
+    ::FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,
         nullptr, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), errorMessage, 0, nullptr);
 
     if (errorMessage)
     {
         ss << file << "(" << line << "): " << "error " << errorCode << ": " << errorMessage << std::endl;
-        LocalFree(errorMessage);
+        ::LocalFree(errorMessage);
     }
     else
     {
         ss << file << "(" << line << "): " << message << std::endl;
     }
 
-    OutputDebugStringA(ss.str().c_str());
-    MessageBoxA(nullptr, message.c_str(), function.c_str(), MB_ICONERROR);
+    ::OutputDebugStringA(ss.str().c_str());
+    ::MessageBoxA(nullptr, message.c_str(), function.c_str(), MB_ICONERROR);
     throw new std::exception(message.c_str());
 }
 
 // Report an error message and throw an std::exception.
-#define ReportError( msg ) ReportErrorAndThrow( __FILE__, __LINE__, __FUNCTION__, (msg) )
+#define ReportError( msg ) ::ReportErrorAndThrow( __FILE__, __LINE__, __FUNCTION__, (msg) )
